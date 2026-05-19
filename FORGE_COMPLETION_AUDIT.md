@@ -49,13 +49,14 @@
 - Production support/legal copy requires owner-provided final text; placeholder support/legal text is documented in `HUMAN_INPUT_NEEDED.md`.
 
 ## Verification
-- `npm run build` passed on May 19, 2026 after the Auth.js host-trust deployment fix.
-- `DATABASE_URL="file:./dev.db" npx prisma db push` completed and regenerated Prisma Client.
-- Dev server started at `http://localhost:3001` because port 3000 was already occupied.
+- `npm run build` passed on May 19, 2026 after the Docker/Auth.js host-trust deployment fix.
+- `DATABASE_URL="file:./prisma/dev.db" npx prisma db push` completed and regenerated Prisma Client.
+- Dev server started at `http://localhost:3000`.
+- Standalone server started at `http://127.0.0.1:3100` with `DATABASE_URL="file:/tmp/forge-standalone-smoke.db"`, matching the Docker runtime server path.
 - Hosted-domain Auth.js session smoke test returned HTTP 200 with `Host: freelancer-tax-withholding-helper.forge.yoursiteguru.com`, verifying the `UntrustedHost` deployment failure is fixed.
 - Public route smoke tests returned HTTP 200: `/`, `/calculator`, `/calculator/california`, `/quarterly-tax-dates`, `/guide/how-much-to-set-aside-freelance-taxes`, `/pricing`, `/login`, `/signup`, `/about`, `/contact`, `/blog`, `/legal/privacy`, `/legal/terms`.
 - Protected dashboard route redirects unauthenticated users to `/login`.
 - Authenticated API workflow passed: signup, credentials login, profile save, income entry create, transfer patch, CSV export, Stripe checkout fallback.
 - Integration fallback tests passed: waitlist capture, Stripe checkout fallback, Resend cron dry-run.
-- Playwright screenshot pass completed for desktop homepage and mobile calculator; layouts rendered cleanly with no obvious overlap.
+- Playwright screenshot pass completed for desktop homepage, mobile calculator, and desktop pricing; layouts rendered cleanly with no obvious overlap.
 - `docker build .` was attempted, but Docker daemon access is denied for this user at `/var/run/docker.sock`; the Dockerfile is present and aligned with standalone Next.js output.

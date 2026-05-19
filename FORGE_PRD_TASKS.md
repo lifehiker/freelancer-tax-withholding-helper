@@ -78,6 +78,7 @@ Implementation order: foundation -> data/auth -> core workflows -> secondary wor
 - [x] Dockerfile uses standalone output and existing `public/` directory.
 - [x] Dockerfile initializes Prisma schema at container startup.
 - [x] Dockerfile sets `AUTH_TRUST_HOST=true` for hosted Forge/Coolify domains.
+- [x] Standalone Next.js server path starts successfully with runtime SQLite configuration.
 - [x] `docker build .` attempted; Docker daemon permission denied in this environment.
 
 ## Verification
