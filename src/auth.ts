@@ -17,6 +17,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: hasGoogleOAuth ? PrismaAdapter(prisma) : undefined,
   session: { strategy: "jwt" },
   secret: process.env.AUTH_SECRET || "development-only-change-me",
+  trustHost: true,
   pages: {
     signIn: "/login",
   },

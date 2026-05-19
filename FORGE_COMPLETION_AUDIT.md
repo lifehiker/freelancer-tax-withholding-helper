@@ -16,6 +16,7 @@
 - Email/password signup and login: `src/app/api/auth/signup/route.ts`, `src/auth.ts`, `src/components/AuthForm.tsx`.
 - Optional Google OAuth when `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` are present: `src/auth.ts`, `src/app/login/page.tsx`, `src/app/signup/page.tsx`.
 - Protected app shell and auth redirect: `src/app/(app)/layout.tsx`, `src/lib/auth-helpers.ts`.
+- Production host trust for Forge/Coolify domains, fixing Auth.js `UntrustedHost`: `src/auth.ts`, `Dockerfile`.
 
 ## Core Product Workflows
 - Tax profile onboarding: `src/app/(app)/onboard/page.tsx`, `src/components/OnboardingForm.tsx`, `src/app/api/tax-profile/route.ts`.
@@ -48,11 +49,13 @@
 - Production support/legal copy requires owner-provided final text; placeholder support/legal text is documented in `HUMAN_INPUT_NEEDED.md`.
 
 ## Verification
-- `npm run build` passed on May 19, 2026.
+- `npm run build` passed on May 19, 2026 after the Auth.js host-trust deployment fix.
 - `DATABASE_URL="file:./dev.db" npx prisma db push` completed and regenerated Prisma Client.
-- Dev server started at `http://localhost:3000`.
-- Public route smoke tests returned HTTP 200: `/`, `/calculator`, `/calculator/california`, `/quarterly-tax-dates`, `/guide/how-much-to-set-aside-freelance-taxes`, `/pricing`, `/login`, `/about`, `/contact`.
-- Authenticated API workflow passed: signup, credentials login, profile save, income entry create, transfer patch, CSV export.
+- Dev server started at `http://localhost:3001` because port 3000 was already occupied.
+- Hosted-domain Auth.js session smoke test returned HTTP 200 with `Host: freelancer-tax-withholding-helper.forge.yoursiteguru.com`, verifying the `UntrustedHost` deployment failure is fixed.
+- Public route smoke tests returned HTTP 200: `/`, `/calculator`, `/calculator/california`, `/quarterly-tax-dates`, `/guide/how-much-to-set-aside-freelance-taxes`, `/pricing`, `/login`, `/signup`, `/about`, `/contact`, `/blog`, `/legal/privacy`, `/legal/terms`.
+- Protected dashboard route redirects unauthenticated users to `/login`.
+- Authenticated API workflow passed: signup, credentials login, profile save, income entry create, transfer patch, CSV export, Stripe checkout fallback.
 - Integration fallback tests passed: waitlist capture, Stripe checkout fallback, Resend cron dry-run.
 - Playwright screenshot pass completed for desktop homepage and mobile calculator; layouts rendered cleanly with no obvious overlap.
 - `docker build .` was attempted, but Docker daemon access is denied for this user at `/var/run/docker.sock`; the Dockerfile is present and aligned with standalone Next.js output.

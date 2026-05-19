@@ -21,6 +21,7 @@ Implementation order: foundation -> data/auth -> core workflows -> secondary wor
 - [x] Credentials login through NextAuth.
 - [x] Protected app routes redirect unauthenticated users to login.
 - [x] Optional Google OAuth when `AUTH_GOOGLE_ID` and `AUTH_GOOGLE_SECRET` are provided.
+- [x] Auth.js production host trust configured to prevent `UntrustedHost` deployment failures.
 - [x] Auth flow smoke-tested locally.
 
 ## User-Facing App Pages
@@ -76,6 +77,7 @@ Implementation order: foundation -> data/auth -> core workflows -> secondary wor
 - [x] `next.config.ts` uses `output: "standalone"`.
 - [x] Dockerfile uses standalone output and existing `public/` directory.
 - [x] Dockerfile initializes Prisma schema at container startup.
+- [x] Dockerfile sets `AUTH_TRUST_HOST=true` for hosted Forge/Coolify domains.
 - [x] `docker build .` attempted; Docker daemon permission denied in this environment.
 
 ## Verification
