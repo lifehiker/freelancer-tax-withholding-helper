@@ -10,9 +10,13 @@ export async function PATCH(request: Request, { params }: { params: Promise<{ id
   const resolved = await params;
   const parsed = schema.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Invalid update." }, { status: 400 });
-  const entry = await prisma.incomeEntry.update({
+  const result = await prisma.incomeEntry.updateMany({
     where: { id: resolved.id, userId: user.id },
     data: { transferred: parsed.data.transferred },
+  });
+  if (result.count === 0) return NextResponse.json({ error: "Income entry not found." }, { status: 404 });
+  const entry = await prisma.incomeEntry.findUniqueOrThrow({
+    where: { id: resolved.id },
   });
   return NextResponse.json({ entry });
 }

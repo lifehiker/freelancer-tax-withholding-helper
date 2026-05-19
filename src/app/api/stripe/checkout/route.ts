@@ -23,6 +23,7 @@ export async function POST(request: Request) {
     success_url: appUrl("/dashboard?upgraded=1"),
     cancel_url: appUrl("/pricing"),
     metadata: { userId: user.id },
+    subscription_data: { metadata: { userId: user.id } },
   });
   return NextResponse.json({ url: session.url });
 }

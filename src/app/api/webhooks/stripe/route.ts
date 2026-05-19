@@ -14,6 +14,19 @@ export async function POST(request: Request) {
   const signature = (await headers()).get("stripe-signature");
   if (!signature) return NextResponse.json({ error: "Missing signature" }, { status: 400 });
   const event = stripe.webhooks.constructEvent(body, signature, secret);
+  if (event.type === "checkout.session.completed") {
+    const session = event.data.object;
+    const userId = session.metadata?.userId;
+    if (userId) {
+      await prisma.user.update({
+        where: { id: userId },
+        data: {
+          stripeCustomerId: typeof session.customer === "string" ? session.customer : undefined,
+          subscriptionStatus: "active",
+        },
+      });
+    }
+  }
   if (event.type === "customer.subscription.updated" || event.type === "customer.subscription.deleted" || event.type === "customer.subscription.created") {
     const subscription = event.data.object;
     const userId = subscription.metadata?.userId;
@@ -21,6 +34,7 @@ export async function POST(request: Request) {
       await prisma.user.update({
         where: { id: userId },
         data: {
+          stripeCustomerId: typeof subscription.customer === "string" ? subscription.customer : undefined,
           stripeSubscriptionId: subscription.id,
           subscriptionStatus: subscription.status,
         },

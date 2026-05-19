@@ -21,6 +21,7 @@ export function PaymentLoggerDialog() {
   const [label, setLabel] = useState("");
   const [entry, setEntry] = useState<CreatedEntry | null>(null);
   const [error, setError] = useState("");
+  const [bankMessage, setBankMessage] = useState("");
   const [pending, startTransition] = useTransition();
 
   function submit() {
@@ -53,6 +54,11 @@ export function PaymentLoggerDialog() {
       setEntry(null);
       router.refresh();
     });
+  }
+
+  function openBankApp() {
+    setBankMessage("Opening your banking app if your device supports a bank URL scheme. Return here to mark the transfer complete.");
+    window.location.href = "banking://";
   }
 
   return (
@@ -88,9 +94,11 @@ export function PaymentLoggerDialog() {
                 <div className="result-row"><span>State tax</span><strong>{currency(entry.stateSetAside)}</strong></div>
                 <div className="result-row"><span>Total set-aside ({percent(entry.percentage)})</span><strong>{currency(entry.totalSetAside)}</strong></div>
                 <div style={{ display: "flex", gap: 10, flexWrap: "wrap", marginTop: 16 }}>
+                  <button className="secondary-button" onClick={openBankApp}>Open bank app</button>
                   <button className="button" onClick={markTransferred}>Mark transferred to savings</button>
                   <button className="secondary-button" onClick={() => setOpen(false)}>I&apos;ll do it later</button>
                 </div>
+                {bankMessage && <p className="muted">{bankMessage}</p>}
               </div>
             )}
           </div>
