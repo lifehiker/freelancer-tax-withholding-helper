@@ -1,0 +1,16 @@
+{
+  "name": "WithholdingHelper",
+  "short_name": "Withholding",
+  "description": "Freelance tax set-aside calculator and quarterly estimate helper.",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#f7f5f0",
+  "theme_color": "#176b58",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}

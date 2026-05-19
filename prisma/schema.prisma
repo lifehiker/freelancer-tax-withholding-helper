@@ -1,0 +1,74 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                     String        @id @default(cuid())
+  email                  String        @unique
+  name                   String?
+  image                  String?
+  passwordHash           String?
+  createdAt              DateTime      @default(now())
+  updatedAt              DateTime      @updatedAt
+  stripeCustomerId       String?
+  stripeSubscriptionId   String?
+  subscriptionStatus     String        @default("free")
+  taxProfile             TaxProfile?
+  incomeEntries          IncomeEntry[]
+  quarterlyEstimates     QuarterlyEstimate[]
+}
+
+model TaxProfile {
+  id                         String   @id @default(cuid())
+  userId                     String   @unique
+  filingStatus               String
+  state                      String
+  estimatedAnnualDeductions  Float
+  priorYearTaxLiability      Float?
+  remindersEnabled           Boolean  @default(false)
+  updatedAt                  DateTime @updatedAt
+  user                       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model IncomeEntry {
+  id                 String   @id @default(cuid())
+  userId             String
+  amount             Float
+  label              String?
+  receivedAt         DateTime @default(now())
+  federalSetAside    Float
+  stateSetAside      Float
+  seSetAside         Float
+  totalSetAside      Float
+  percentage         Float
+  transferred        Boolean  @default(false)
+  createdAt          DateTime @default(now())
+  user               User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model QuarterlyEstimate {
+  id                String    @id @default(cuid())
+  userId            String
+  year              Int
+  quarter           Int
+  estimatedPayment  Float
+  safeHarborMethod  String
+  paid              Boolean   @default(false)
+  paidAt            DateTime?
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, year, quarter])
+}
+
+model WaitlistEmail {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  source    String?
+  createdAt DateTime @default(now())
+}
