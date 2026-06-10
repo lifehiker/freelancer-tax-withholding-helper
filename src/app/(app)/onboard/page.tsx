@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 
 export default async function OnboardPage() {
   const user = await requireUser();
-  const profile = await prisma.taxProfile.findUnique({ where: { userId: user.id } });
+  const profile = await prisma.taxProfile.findUnique({ where: { userId: user.id } }).catch(() => null);
   return (
     <div>
       <div className="eyebrow">Tax profile</div>
